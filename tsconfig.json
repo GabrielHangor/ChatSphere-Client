@@ -1,19 +1,14 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": [
-    "../frontend/src/env.d.ts",
-    "../frontend/src/**/*",
-    "../frontend/src/**/*.ts",
-    "../frontend/src/**/*.vue"
-  ],
+  "include": ["src/env.d.ts", "src/**/*", "src/**/*.ts", "src/**/*.vue"],
   "compilerOptions": {
     "target": "esnext",
     "isolatedModules": true,
     "experimentalDecorators": true,
-    "types": ["node", "vite/client"],
+    "types": ["node", "vite/client", "naive-ui/volar"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["../frontend/src/*"]
+      "@/*": ["./src/*"]
     },
     "lib": ["esnext", "dom"]
   },
