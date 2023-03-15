@@ -1,5 +1,5 @@
 <template>
-  <div class="container"><h1>Chat Screen</h1></div>
+  <div class="container">Sign up</div>
 </template>
 
 <script setup lang="ts"></script>

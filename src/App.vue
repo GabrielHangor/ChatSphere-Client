@@ -1,26 +1,12 @@
 <template>
-  <NConfigProvider inline-theme-disabled :theme-overrides="themeOverrides">
-    <NLayout>
-      <NLayoutHeader></NLayoutHeader>
-      <NLayoutContent class="container">
-        <RouterView />
-      </NLayoutContent>
-    </NLayout>
-
+  <NConfigProvider abstract inline-theme-disabled :theme-overrides="themeOverrides">
+    <main><RouterView /></main>
     <NGlobalStyle />
   </NConfigProvider>
 </template>
 
 <script setup lang="ts">
-  import {
-    NConfigProvider,
-    NGlobalStyle,
-    NLayout,
-    NLayoutContent,
-    NLayoutHeader,
-    useOsTheme,
-    darkTheme,
-  } from 'naive-ui';
+  import { useOsTheme, darkTheme, NThemeEditor } from 'naive-ui';
   import { computed } from 'vue';
   import { themeOverrides } from '@/styles/themeOverrides';
 
