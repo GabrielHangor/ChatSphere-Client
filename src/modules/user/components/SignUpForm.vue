@@ -2,6 +2,20 @@
   <form @submit.prevent="signIn" class="w-full mt-10 md:mt-0 md:w-[350px] p-5 shadow-xl rounded-md">
     <NFormItem
       size="large"
+      label="Username"
+      :feedback="unref(formValidator.username.$errors[0]?.$message)"
+      :validation-status="formValidator.username.$errors[0]?.$message ? 'error' : 'success'"
+    >
+      <NInput
+        placeholder="Username"
+        clearable
+        autofocus
+        v-model:value="formValues.username"
+        :status="formValidator.username.$errors[0]?.$message ? 'error' : 'success'"
+      />
+    </NFormItem>
+    <NFormItem
+      size="large"
       label="Email"
       :feedback="unref(formValidator.email.$errors[0]?.$message)"
       :validation-status="formValidator.email.$errors[0]?.$message ? 'error' : 'success'"
@@ -9,7 +23,6 @@
       <NInput
         placeholder="Email"
         clearable
-        autofocus
         v-model:value="formValues.email"
         :status="formValidator.email.$errors[0]?.$message ? 'error' : 'success'"
       />
@@ -56,6 +69,7 @@
   import { email, helpers, minLength, required, sameAs } from '@vuelidate/validators';
 
   const formValues = ref({
+    username: null,
     email: null,
     password: null,
     passwordConfirm: null,
@@ -69,6 +83,10 @@
 
   // VALIDATION
   const validationRules = computed(() => ({
+    username: {
+      required,
+      usernameValidation: helpers.withMessage('Minimum 3 symbols length', minLength(3)),
+    },
     email: { required, email },
     password: {
       required,
