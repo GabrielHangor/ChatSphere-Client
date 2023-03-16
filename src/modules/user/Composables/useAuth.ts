@@ -14,7 +14,7 @@ export const useAuth = () => {
         await serviceMethod(params);
       } catch (e) {
         if (e instanceof AxiosError) {
-          error.value = e.response?.data.message;
+          error.value = e.response?.data.message || e.response?.statusText;
         }
       } finally {
         isLoading.value = false;
@@ -26,3 +26,6 @@ export const useAuth = () => {
 
   return { isLoading, error, signUp };
 };
+
+// TODO create an error parser service 
+

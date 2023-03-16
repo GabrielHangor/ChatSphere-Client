@@ -9,3 +9,10 @@ export interface ICreateUserReq {
   email: string;
   password: string;
 }
+
+export interface IAuthUserReq {
+  email: string
+  password: string
+}
+
+

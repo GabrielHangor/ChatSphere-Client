@@ -1,10 +1,14 @@
 import ApiClient from '@/ApiClient';
-import type ICreateUserReq from '@/modules/user/Services/UserService';
-import type { IUser } from './../Models/user.models';
+import type { IAuthUserReq, IUser, ICreateUserReq } from '@/modules/user/Models/user.models';
 
 export default class UserService {
   static async createUser(user: ICreateUserReq) {
+    console.log('trying to create user...probably unsuccessfull');
     const createdUser = await ApiClient.post<IUser>('/users', user);
-    console.log(createdUser);
+    console.log('user created');
+  }
+
+  static async signIn(user: IAuthUserReq) {
+    const loggedInUser = await ApiClient.post('/users/login', user);
   }
 }
