@@ -26,7 +26,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   if (to.meta.requiresAuth && !isLoggedIn()) {
-    return { path: '/signIn' };
+    return { path: '/signUp' };
   }
 });
 

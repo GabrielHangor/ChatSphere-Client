@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="signIn" class="w-full mt-10 md:mt-0 md:w-[350px] p-5 shadow-xl rounded-md">
+  <form
+    @submit.prevent="handleSignUp"
+    class="w-full mt-10 md:mt-0 md:w-[350px] p-5 shadow-xl rounded-md"
+  >
     <NFormItem
       size="large"
       label="Username"
@@ -58,7 +61,9 @@
       />
     </NFormItem>
     <NFormItem>
-      <NButton size="large" block type="primary" attr-type="submit">Sign Up</NButton>
+      <NButton size="large" block type="primary" attr-type="submit" :loading="isLoading">
+        Sign Up
+      </NButton>
     </NFormItem>
   </form>
 </template>
@@ -67,18 +72,44 @@
   import { computed, ref, unref } from 'vue';
   import { useVuelidate } from '@vuelidate/core';
   import { email, helpers, minLength, required, sameAs } from '@vuelidate/validators';
+  import { useAuth } from '@/modules/user/Composables/useAuth';
+  import { useNotification } from 'naive-ui';
+  import { useRouter } from 'vue-router';
+
+  const { isLoading, error, signUp } = useAuth();
+  const router = useRouter();
+  const notification = useNotification();
 
   const formValues = ref({
-    username: null,
-    email: null,
-    password: null,
-    passwordConfirm: null,
+    username: 'Hangor',
+    email: 'hangor21323@ga.ru',
+    password: 'Scac1234',
+    passwordConfirm: 'Scac1234',
   });
 
-  const signIn = async () => {
+  const handleSignUp = async () => {
     const isFormValidated = await formValidator.value.$validate();
 
     if (!isFormValidated) return;
+
+    const { passwordConfirm, ...user } = formValues.value;
+
+    await signUp(user);
+
+    if (error.value) {
+      notification.error({
+        content: 'Error while creating new user',
+        meta: error.value,
+        duration: 2500,
+      });
+    } else {
+      notification.success({
+        content: 'Success',
+        duration: 2500,
+      });
+
+      setTimeout(() => router.push('/'), 2500);
+    }
   };
 
   // VALIDATION

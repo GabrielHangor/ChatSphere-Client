@@ -5,8 +5,5 @@
 </template>
 
 <script setup lang="ts">
-  import SignUpForm from '@/modules/user/components/SignUpForm.vue';
-  import { useAuth } from '@/modules/user/Composables/useAuth';
-
-  const { data } = useAuth();
+  import SignUpForm from '@/modules/user/Components/SignUpForm.vue';
 </script>

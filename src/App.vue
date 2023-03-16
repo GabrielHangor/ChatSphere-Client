@@ -1,6 +1,8 @@
 <template>
   <NConfigProvider abstract inline-theme-disabled :theme-overrides="themeOverrides">
-    <main><RouterView /></main>
+    <NNotificationProvider>
+      <main><RouterView /></main>
+    </NNotificationProvider>
     <NGlobalStyle />
   </NConfigProvider>
 </template>
