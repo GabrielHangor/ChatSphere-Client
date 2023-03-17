@@ -1,24 +1,13 @@
-export interface IUser {
+interface ISuperUser {
   id: string;
   username: string;
   email: string;
-}
-
-export interface ICreateUserReq {
-  username: string;
-  email: string;
   password: string;
-}
-
-export interface IAuthUserReq {
-  email: string;
-  password: string;
-}
-
-export interface IAuthUserRes {
-  username: string;
-  email: string;
   accessToken: string;
   expiresAt: number;
-  tokenType: string;
 }
+
+export type TCreateUserReq = Pick<ISuperUser, 'username' | 'email' | 'password'>;
+export type TAuthUserReq = Pick<ISuperUser, 'email' | 'password'>;
+export type TAuthUserRes = Pick<ISuperUser, 'email' | 'username' | 'accessToken' | 'expiresAt'>;
+export type TUser = Pick<ISuperUser, 'username' | 'email'>;

@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { ref } from 'vue';
 import UserService from '@/modules/user/Services/UserService';
+import AuthService from '@/modules/user/Services/AuthService';
 
 export const useAuth = () => {
   const isLoading = ref(false);
@@ -24,9 +25,10 @@ export const useAuth = () => {
 
   const signUp = handleServiceCall(UserService.createUser);
 
-  const signIn = handleServiceCall(UserService.login);
+  const signIn = handleServiceCall(AuthService.login);
 
   return { isLoading, error, signUp, signIn };
 };
 
 // TODO create an error parser service
+// TODO no need for a separate useAuth composable, split the logic
