@@ -19,6 +19,6 @@ export interface IAuthUserRes {
   username: string;
   email: string;
   accessToken: string;
-  expiresIn: number;
+  expiresAt: number;
   tokenType: string;
 }

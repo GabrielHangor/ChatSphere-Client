@@ -5,8 +5,9 @@ import type { IUser } from '@/modules/user/Models/user.models';
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<Partial<IUser> | null>(null);
   const accessToken = ref<string | null>(null);
-  const expiresIn = ref<number | null>(null);
+  const expiresAt = ref<number | null>(null);
+
   const isLoggedIn = computed(() => !!user.value);
 
-  return { user, isLoggedIn, accessToken, expiresIn };
+  return { user, isLoggedIn, accessToken, expiresAt };
 });
