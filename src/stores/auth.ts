@@ -1,10 +1,12 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import type { IUser } from '@/modules/user/Models/user.models';
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null);
+  const user = ref<Partial<IUser> | null>(null);
   const accessToken = ref<string | null>(null);
+  const expiresIn = ref<number | null>(null);
   const isLoggedIn = computed(() => !!user.value);
 
-  return { user, isLoggedIn, accessToken };
+  return { user, isLoggedIn, accessToken, expiresIn };
 });

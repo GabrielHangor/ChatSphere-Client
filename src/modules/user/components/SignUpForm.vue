@@ -3,6 +3,7 @@
     @submit.prevent="handleSignUp"
     class="w-full mt-10 md:mt-0 md:w-[350px] p-5 shadow-xl rounded-md"
   >
+    <h2 class="text-center py-5">Sign Up</h2>
     <NFormItem
       size="large"
       label="Username"
@@ -65,6 +66,10 @@
         Sign Up
       </NButton>
     </NFormItem>
+    <p class="text-center">
+      Already have an account?
+      <RouterLink :to="'/signIn'" class="underline-offset-4">Sign In</RouterLink>
+    </p>
   </form>
 </template>
 
@@ -81,13 +86,15 @@
   const notification = useNotification();
 
   const formValues = ref({
-    username: 'Hangor',
-    email: 'hangor21323@ga.ru',
+    username: 'Gabriel',
+    email: 'gaba234@ya.ru',
     password: 'Scac1234',
     passwordConfirm: 'Scac1234',
   });
 
   const handleSignUp = async () => {
+    if (isLoading.value) return;
+
     const isFormValidated = await formValidator.value.$validate();
 
     if (!isFormValidated) return;

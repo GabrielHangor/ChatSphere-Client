@@ -24,8 +24,9 @@ export const useAuth = () => {
 
   const signUp = handleServiceCall(UserService.createUser);
 
-  return { isLoading, error, signUp };
+  const signIn = handleServiceCall(UserService.login);
+
+  return { isLoading, error, signUp, signIn };
 };
 
-// TODO create an error parser service 
-
+// TODO create an error parser service

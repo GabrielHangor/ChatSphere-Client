@@ -11,8 +11,14 @@ export interface ICreateUserReq {
 }
 
 export interface IAuthUserReq {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
-
+export interface IAuthUserRes {
+  username: string;
+  email: string;
+  accessToken: string;
+  expiresIn: number;
+  tokenType: string;
+}

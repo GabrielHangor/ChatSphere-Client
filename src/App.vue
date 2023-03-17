@@ -1,7 +1,13 @@
 <template>
   <NConfigProvider abstract inline-theme-disabled :theme-overrides="themeOverrides">
     <NNotificationProvider>
-      <main><RouterView /></main>
+      <main>
+        <RouterView v-slot="{ Component, route }">
+          <transition appear mode="out-in" name="fade">
+            <component :key="route.name" :is="Component" />
+          </transition>
+        </RouterView>
+      </main>
     </NNotificationProvider>
     <NGlobalStyle />
   </NConfigProvider>

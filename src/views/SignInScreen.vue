@@ -1,5 +1,9 @@
 <template>
-  <div class="container">Sign in</div>
+  <div class="container min-h-screen flex flex-col items-center md:justify-center">
+    <SignInForm />
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import SignInForm from '@/modules/user/Components/SignInForm.vue';
+</script>

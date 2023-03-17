@@ -27,7 +27,7 @@ router.beforeEach((to) => {
   const { isLoggedIn } = useAuthStore();
 
   if (to.meta.requiresAuth && !isLoggedIn) {
-    return { path: '/signUp' };
+    return { path: '/signIn' };
   }
 });
 
