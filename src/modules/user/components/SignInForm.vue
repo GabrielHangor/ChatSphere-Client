@@ -50,17 +50,18 @@
   import { computed, ref, unref } from 'vue';
   import { useVuelidate } from '@vuelidate/core';
   import { email, helpers, minLength, required } from '@vuelidate/validators';
-  import { useAuth } from '@/modules/user/Composables/useAuth';
   import { useNotification } from 'naive-ui';
   import { useRouter } from 'vue-router';
+  import useAsync from '@/modules/common/composables/useAsync';
+  import AuthService from '../services/AuthService';
 
-  const { isLoading, error, signIn } = useAuth();
+  const { error, isLoading, fetch: signIn } = useAsync(AuthService.login);
   const router = useRouter();
   const notification = useNotification();
 
   const formValues = ref({
-    email: 'gaba234@ya.ru',
-    password: 'Scac1234',
+    email: 'gaba2234@ya.ru',
+    password: 'Qwerty123',
   });
 
   const handleSignIn = async () => {
@@ -76,7 +77,8 @@
       notification.error({
         content: 'Error while signing in',
         meta: error.value,
-        duration: 2500,
+        duration: 3000,
+
       });
     } else {
       notification.success({

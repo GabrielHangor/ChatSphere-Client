@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import UserService from '@/modules/user/Services/UserService';
+import AuthService from '@/modules/user/services/AuthService';
 
 const ApiClient = axios.create({ baseURL: '/api' });
 
@@ -8,9 +8,7 @@ ApiClient.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      UserService.logout();
-    }
+    if (error.response?.status === 401) AuthService.logout();
 
     return Promise.reject(error);
   }

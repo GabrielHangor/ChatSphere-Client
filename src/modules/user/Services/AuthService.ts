@@ -1,7 +1,7 @@
 import ApiClient from '@/ApiClient';
 import { useAuthStore } from '@/stores/auth';
-import type { TAuthUserReq, TAuthUserRes } from '@/modules/user/Models/user.models';
-import { useRouter } from 'vue-router';
+import type { TAuthUserReq, TAuthUserRes } from '@/modules/user/models/user.models';
+import router from '@/router';
 
 export default class AuthService {
   static async login(credentials: TAuthUserReq) {
@@ -11,14 +11,15 @@ export default class AuthService {
 
   static logout() {
     const authStore = useAuthStore();
-    const router = useRouter();
+
     authStore.user = null;
     authStore.accessToken = null;
     authStore.expiresAt = null;
     localStorage.removeItem('userCredentials');
 
     ApiClient.defaults.headers.common = {};
-    router.push('/');
+
+    router.push('/signIn');
   }
 
   static restoreUser() {

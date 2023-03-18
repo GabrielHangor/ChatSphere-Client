@@ -4,7 +4,7 @@ import App from './App.vue';
 import router from './router';
 
 import './styles/style.css';
-import AuthService from '@/modules/user/Services/AuthService';
+import AuthService from '@/modules/user/services/AuthService';
 
 const app = createApp(App);
 

@@ -2,22 +2,23 @@
   <div class="container">
     <h1>Chat Screen</h1>
     <ul>
-      <li v-for="user in users" :key="user.id">{{ user }}</li>
+      <li v-for="user in userList?.items" :key="user.id">{{ user }}</li>
     </ul>
+    <button @click="logout">Logout</button>
   </div>
 </template>
 
 <script setup lang="ts">
-  import UserService from '@/modules/user/Services/UserService';
-  import { useAuthStore } from '@/stores/auth';
-  import { storeToRefs } from 'pinia';
-  import { onMounted, ref } from 'vue';
+  import useAsync from '@/modules/common/composables/useAsync';
+  import AuthService from '@/modules/user/services/AuthService';
+  import UserService from '@/modules/user/services/UserService';
+  import { onMounted } from 'vue';
 
-  const users = ref();
+  const { data: userList, error, isLoading, fetch } = useAsync(UserService.getAllUsers);
 
-  const fetchUsers = async () => {
-    users.value = await UserService.getAllUsers();
+  const logout = () => {
+    AuthService.logout();
   };
 
-  onMounted(() => fetchUsers());
+  onMounted(() => fetch());
 </script>

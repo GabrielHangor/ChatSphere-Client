@@ -77,19 +77,21 @@
   import { computed, ref, unref } from 'vue';
   import { useVuelidate } from '@vuelidate/core';
   import { email, helpers, minLength, required, sameAs } from '@vuelidate/validators';
-  import { useAuth } from '@/modules/user/Composables/useAuth';
+
   import { useNotification } from 'naive-ui';
   import { useRouter } from 'vue-router';
+  import useAsync from '@/modules/common/composables/useAsync';
+  import UserService from '../Services/UserService';
 
-  const { isLoading, error, signUp } = useAuth();
+  const { error, isLoading, fetch: signUp } = useAsync(UserService.createUser);
   const router = useRouter();
   const notification = useNotification();
 
   const formValues = ref({
-    username: 'Gabriel',
-    email: 'gaba234@ya.ru',
-    password: 'Scac1234',
-    passwordConfirm: 'Scac1234',
+    username: 'Hangor',
+    email: 'gaba2234@ya.ru',
+    password: 'Qwerty123',
+    passwordConfirm: 'Qwerty123',
   });
 
   const handleSignUp = async () => {
@@ -107,7 +109,7 @@
       notification.error({
         content: 'Error while creating new user',
         meta: error.value,
-        duration: 2500,
+        duration: 3000,
       });
     } else {
       notification.success({

@@ -1,6 +1,6 @@
 import ApiClient from '@/ApiClient';
-
-import type { TCreateUserReq } from '@/modules/user/Models/user.models';
+import type { IGenericGetRes } from '@/modules/common/models/common.models';
+import type { TCreateUserReq, TUserList } from '@/modules/user/models/user.models';
 
 import AuthService from './AuthService';
 
@@ -11,9 +11,7 @@ export default class UserService {
   }
 
   static async getAllUsers() {
-    const { data } = await ApiClient.get('/users');
-    return data.items;
+    const { data } = await ApiClient.get<IGenericGetRes<TUserList>>('/users');
+    return data;
   }
 }
-
-
