@@ -4,12 +4,12 @@ import type { TAuthUserReq, TAuthUserRes } from '@/modules/user/models/user.mode
 import router from '@/router';
 
 export default class AuthService {
-  static async login(credentials: TAuthUserReq) {
+  public static async login(credentials: TAuthUserReq) {
     const { data: userCredentials } = await ApiClient.post<TAuthUserRes>('/users/login', credentials);
     AuthService.setUserCredentials(userCredentials);
   }
 
-  static logout() {
+  public static logout() {
     const authStore = useAuthStore();
 
     authStore.user = null;
@@ -22,21 +22,33 @@ export default class AuthService {
     router.push('/signIn');
   }
 
-  static restoreUser() {
+  public static restoreUser() {
+    const userCredentials = AuthService.getCredentials();
+
+    if (userCredentials) {
+      const expirationTime = new Date(userCredentials.expiresAt).getTime();
+      const currentTime = Date.now();
+
+      if (currentTime < expirationTime) {
+        AuthService.setUserCredentials(userCredentials);
+      } else {
+        AuthService.logout();
+        console.error('Access token has expired');
+      }
+    }
+  }
+
+  public static getCredentials() {
     const userCredentials = localStorage.getItem('userCredentials');
 
-    if (!userCredentials) return;
-
-    const { accessToken, expiresAt, email, username } = JSON.parse(userCredentials);
-    const expirationTime = new Date(expiresAt).getTime();
-    const currentTime = Date.now();
-
-    if (currentTime < expirationTime) {
-      AuthService.setUserCredentials({ accessToken, expiresAt, username, email });
-    } else {
-      AuthService.logout();
-      throw Error('Access token has expired');
+    if (!userCredentials) {
+      console.error('User credentials not found');
+      return;
     }
+
+    const { accessToken, expiresAt, email, username }: TAuthUserRes = JSON.parse(userCredentials);
+
+    return { accessToken, expiresAt, email, username };
   }
 
   private static setUserCredentials({ username, email, accessToken, expiresAt }: TAuthUserRes) {

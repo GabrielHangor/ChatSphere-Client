@@ -17,6 +17,7 @@ export default function useAsync<T, A extends any[] = []>(cb: FetchFunction<T, A
     } catch (e) {
       if (e instanceof AxiosError) {
         error.value = e.response?.data.message || e.response?.statusText;
+        console.error(e);
       }
     } finally {
       isLoading.value = false;
@@ -25,3 +26,4 @@ export default function useAsync<T, A extends any[] = []>(cb: FetchFunction<T, A
 
   return { data, error, isLoading, fetch };
 }
+

@@ -77,11 +77,10 @@
   import { computed, ref, unref } from 'vue';
   import { useVuelidate } from '@vuelidate/core';
   import { email, helpers, minLength, required, sameAs } from '@vuelidate/validators';
-
   import { useNotification } from 'naive-ui';
   import { useRouter } from 'vue-router';
   import useAsync from '@/modules/common/composables/useAsync';
-  import UserService from '../Services/UserService';
+  import UserService from '../services/UserService';
 
   const { error, isLoading, fetch: signUp } = useAsync(UserService.createUser);
   const router = useRouter();

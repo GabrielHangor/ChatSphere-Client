@@ -78,7 +78,6 @@
         content: 'Error while signing in',
         meta: error.value,
         duration: 3000,
-
       });
     } else {
       notification.success({
