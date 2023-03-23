@@ -46,18 +46,21 @@ export default class AuthService {
       return;
     }
 
-    const { accessToken, expiresAt, email, username }: TAuthUserRes = JSON.parse(userCredentials);
+    const { accessToken, expiresAt, email, username, id }: TAuthUserRes = JSON.parse(userCredentials);
 
-    return { accessToken, expiresAt, email, username };
+    return { accessToken, expiresAt, email, username, id };
   }
 
-  private static setUserCredentials({ username, email, accessToken, expiresAt }: TAuthUserRes) {
+  private static setUserCredentials({ id, username, email, accessToken, expiresAt }: TAuthUserRes) {
     const authStore = useAuthStore();
-    authStore.user = { username, email };
+    authStore.user = { username, email, id };
     authStore.accessToken = accessToken;
     authStore.expiresAt = expiresAt;
 
-    localStorage.setItem('userCredentials', JSON.stringify({ accessToken, expiresAt, username, email }));
+    localStorage.setItem(
+      'userCredentials',
+      JSON.stringify({ id, accessToken, expiresAt, username, email })
+    );
     ApiClient.defaults.headers.common = { Authorization: `Bearer ${accessToken}` };
   }
 }

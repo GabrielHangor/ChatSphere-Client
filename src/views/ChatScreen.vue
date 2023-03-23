@@ -4,33 +4,26 @@
 
     <button @click="logout">Logout</button>
 
-    <h2>messages</h2>
+    <h2>Rooms</h2>
     <ul>
-      <li v-for="message in messages" :key="message">{{ message }}</li>
+      <li v-for="room in rooms" :key="room.id">{{ room.id }}</li>
     </ul>
-    <input v-model="msg" type="text" placeholder="send msg to socket" />
-    <button @click="sendMsg">send</button>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { ChatEvent, type IChatRoom } from '@/modules/chat/models/chat.models';
   import ChatService from '@/modules/chat/services/ChatService';
+  import type { IPaginatedRes } from '@/modules/common/models/common.models';
   import AuthService from '@/modules/user/services/AuthService';
 
-  import { onMounted, ref } from 'vue';
+  import { ref } from 'vue';
 
   const logout = () => AuthService.logout();
 
-  const msg = ref('');
-  const messages = ref<string[]>([]);
+  const rooms = ref<IChatRoom[]>();
 
-  const sendMsg = () => {
-    ChatService.sendMessage('message', msg.value);
-  };
-
-  onMounted(() => {
-    ChatService.subscribeToEvent('message', (msg) => {
-      messages.value.push(msg);
-    });
+  ChatService.subscribeToEvent<IPaginatedRes<IChatRoom[]>>(ChatEvent.GET_ROOMS, (payload) => {
+    rooms.value = payload.items;
   });
 </script>

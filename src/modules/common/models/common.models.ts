@@ -6,7 +6,22 @@ export interface IPaginationMeta {
   currentPage: number;
 }
 
-export interface IGenericGetRes<T> {
+export interface IPaginatedRes<T> {
   meta: IPaginationMeta;
   items: T;
 }
+
+export interface ServerException {
+  response: Response;
+  status: number;
+  options: Options;
+  message: string;
+  name: string;
+}
+
+interface Response {
+  statusCode: number;
+  message: string;
+}
+
+interface Options {}
