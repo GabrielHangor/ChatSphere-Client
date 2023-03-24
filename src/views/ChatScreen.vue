@@ -1,29 +1,27 @@
 <template>
-  <div class="container">
-    <h1>Chat Screen</h1>
-
-    <button @click="logout">Logout</button>
-
-    <h2>Rooms</h2>
-    <ul>
-      <li v-for="room in rooms" :key="room.id">{{ room.id }}</li>
-    </ul>
-  </div>
+  <n-layout position="absolute" has-sider>
+    <n-layout-sider
+      collapse-mode="transform"
+      :collapsed-width="10"
+      :width="400"
+      show-trigger="arrow-circle"
+      content-style="padding: 24px;"
+      bordered
+    >
+      <ChatList @on-room-select="(room) => (selectedRoom = room)" />
+    </n-layout-sider>
+    <n-layout-content  content-style="padding: 24px;display: flex;flex-direction: column">
+      <ChatRoom v-if="selectedRoom" :room="selectedRoom" />
+      <NResult v-else status="404" title="Please select the chat room" class="my-auto"></NResult>
+    </n-layout-content>
+  </n-layout>
 </template>
 
 <script setup lang="ts">
-  import { ChatEvent, type IChatRoom } from '@/modules/chat/models/chat.models';
-  import ChatService from '@/modules/chat/services/ChatService';
-  import type { IPaginatedRes } from '@/modules/common/models/common.models';
-  import AuthService from '@/modules/user/services/AuthService';
-
+  import ChatList from '@/modules/chat/components/ChatList.vue';
+  import ChatRoom from '@/modules/chat/components/ChatRoom.vue';
+  import type { IChatRoom } from '@/modules/chat/models/chat.models';
   import { ref } from 'vue';
 
-  const logout = () => AuthService.logout();
-
-  const rooms = ref<IChatRoom[]>();
-
-  ChatService.subscribeToEvent<IPaginatedRes<IChatRoom[]>>(ChatEvent.GET_ROOMS, (payload) => {
-    rooms.value = payload.items;
-  });
+  const selectedRoom = ref<IChatRoom>();
 </script>

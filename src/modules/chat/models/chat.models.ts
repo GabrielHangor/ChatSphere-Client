@@ -14,4 +14,6 @@ export enum ChatEvent {
   MESSAGE = 'message',
   GET_ROOMS = 'rooms',
   CREATE_ROOM = 'createRoom',
+  PAGINATE_ROOM = 'paginateRoom',
 }
+

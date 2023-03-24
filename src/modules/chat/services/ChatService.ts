@@ -2,40 +2,35 @@ import { io, Socket } from 'socket.io-client';
 import AuthService from '@/modules/user/services/AuthService';
 import { ChatEvent } from '@/modules/chat/models/chat.models';
 import type { ServerException } from '@/modules/common/models/common.models';
-import { socketConfig } from '@/modules/chat/constants/chat.constants';
 
 export default class ChatService {
   private static socket: Socket | undefined;
 
-  public static sendEvent<T>(event: string, payload: T): void {
-    if (!ChatService.socket) ChatService.initializeSocket();
-
+  public static sendEvent<T>(event: string, payload: T) {
     if (ChatService.socket) ChatService.socket.emit(event, payload);
   }
 
-  public static subscribeToEvent<T>(event: string, callback: (payload: T) => void): void {
-    if (!ChatService.socket) ChatService.initializeSocket();
-
+  public static subscribeToEvent<T>(event: string, callback: (payload: T) => void) {
     if (ChatService.socket) ChatService.socket.on(event, callback);
   }
 
-  public static unsubscribeFromEvent<T>(event: string, callback: (payload: T) => void): void {
+  public static unsubscribeFromEvent<T>(event: string, callback: (payload: T) => void) {
     if (ChatService.socket) {
       ChatService.socket.off(event, callback);
     }
   }
 
-  public static disconnect(): void {
+  public static disconnect() {
     if (ChatService.socket) {
       ChatService.socket.disconnect();
       ChatService.socket = undefined;
     }
   }
 
-  private static initializeSocket(): void {
+  public static connect(accessToken: string) {
     try {
-      ChatService.socket = io(socketConfig.socketUrl, {
-        extraHeaders: socketConfig.extraHeaders,
+      ChatService.socket = io(import.meta.env.VITE_BASE_SOCKET_URL, {
+        extraHeaders: { Authorization: accessToken },
       });
     } catch (error) {
       console.error('Error initializing socket:', error);

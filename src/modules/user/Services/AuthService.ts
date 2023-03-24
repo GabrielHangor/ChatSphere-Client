@@ -2,11 +2,13 @@ import ApiClient from '@/ApiClient';
 import { useAuthStore } from '@/stores/auth';
 import type { TAuthUserReq, TAuthUserRes } from '@/modules/user/models/user.models';
 import router from '@/router';
+import ChatService from '@/modules/chat/services/ChatService';
 
 export default class AuthService {
   public static async login(credentials: TAuthUserReq) {
     const { data: userCredentials } = await ApiClient.post<TAuthUserRes>('/users/login', credentials);
     AuthService.setUserCredentials(userCredentials);
+    ChatService.connect(AuthService.getCredentials()?.accessToken || '');
   }
 
   public static logout() {
@@ -31,6 +33,7 @@ export default class AuthService {
 
       if (currentTime < expirationTime) {
         AuthService.setUserCredentials(userCredentials);
+        ChatService.connect(userCredentials.accessToken);
       } else {
         AuthService.logout();
         console.error('Access token has expired');
@@ -46,9 +49,9 @@ export default class AuthService {
       return;
     }
 
-    const { accessToken, expiresAt, email, username, id }: TAuthUserRes = JSON.parse(userCredentials);
+    const credentials: TAuthUserRes = JSON.parse(userCredentials);
 
-    return { accessToken, expiresAt, email, username, id };
+    return credentials;
   }
 
   private static setUserCredentials({ id, username, email, accessToken, expiresAt }: TAuthUserRes) {

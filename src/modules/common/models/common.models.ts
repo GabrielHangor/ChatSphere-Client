@@ -25,3 +25,8 @@ interface Response {
 }
 
 interface Options {}
+
+export type TPaginationOptions = {
+  limit: number;
+  page: number;
+};
