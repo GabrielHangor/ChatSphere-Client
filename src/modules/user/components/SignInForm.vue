@@ -1,5 +1,5 @@
 <template>
-  <form
+  <NForm
     @submit.prevent="handleSignIn"
     class="w-full mt-10 md:mt-0 md:w-[350px] p-5 shadow-xl rounded-md"
   >
@@ -43,7 +43,7 @@
       Dont have an account?
       <RouterLink :to="'/signUp'" class="underline-offset-4">Sign Up</RouterLink>
     </p>
-  </form>
+  </NForm>
 </template>
 
 <script setup lang="ts">

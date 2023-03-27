@@ -13,4 +13,9 @@ export default class UserService {
     const { data } = await ApiClient.get<IPaginatedRes<TUserList>>('/users');
     return data;
   }
+
+  public static async getUsersByName(username: string) {
+    const { data } = await ApiClient.get<TUserList>(`/users/${username}`);
+    return data;
+  }
 }

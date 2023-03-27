@@ -4,27 +4,23 @@ import { ChatEvent } from '@/modules/chat/models/chat.models';
 import type { ServerException } from '@/modules/common/models/common.models';
 
 export default class ChatService {
-  private static socket: Socket | undefined;
+  private static socket: Socket | null;
 
-  public static sendEvent<T>(event: string, payload: T) {
-    if (ChatService.socket) ChatService.socket.emit(event, payload);
+  public static sendEvent<T>(event: ChatEvent, payload: T) {
+    ChatService.socket?.emit(event, payload);
   }
 
-  public static subscribeToEvent<T>(event: string, callback: (payload: T) => void) {
-    if (ChatService.socket) ChatService.socket.on(event, callback);
+  public static subscribeToEvent<T>(event: ChatEvent, callback: (payload: T) => void) {
+    ChatService.socket?.on(event, callback);
   }
 
-  public static unsubscribeFromEvent<T>(event: string, callback: (payload: T) => void) {
-    if (ChatService.socket) {
-      ChatService.socket.off(event, callback);
-    }
+  public static unsubscribeFromEvent<T>(event: ChatEvent, callback: (payload: T) => void) {
+    ChatService.socket?.off(event, callback);
   }
 
   public static disconnect() {
-    if (ChatService.socket) {
-      ChatService.socket.disconnect();
-      ChatService.socket = undefined;
-    }
+    ChatService.socket?.disconnect();
+    ChatService.socket = null;
   }
 
   public static connect(accessToken: string) {
@@ -34,6 +30,7 @@ export default class ChatService {
       });
     } catch (error) {
       console.error('Error initializing socket:', error);
+      return;
     }
 
     ChatService.subscribeToEvent<ServerException>(ChatEvent.ERROR, (error) => {

@@ -10,9 +10,9 @@
     >
       <ChatList @on-room-select="(room) => (selectedRoom = room)" />
     </n-layout-sider>
-    <n-layout-content  content-style="padding: 24px;display: flex;flex-direction: column">
+    <n-layout-content content-style="padding: 24px;display: flex;flex-direction: column">
       <ChatRoom v-if="selectedRoom" :room="selectedRoom" />
-      <NResult v-else status="404" title="Please select the chat room" class="my-auto"></NResult>
+      <NResult v-else status="404" title="No chat room selected" class="my-auto" />
     </n-layout-content>
   </n-layout>
 </template>

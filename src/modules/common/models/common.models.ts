@@ -1,3 +1,5 @@
+import type { ChatEvent } from '@/modules/chat/models/chat.models';
+
 export interface IPaginationMeta {
   totalItems: number;
   itemCount: number;
@@ -30,3 +32,8 @@ export type TPaginationOptions = {
   limit: number;
   page: number;
 };
+
+export interface ISelectOption<T> {
+  label: string;
+  value: T;
+}
