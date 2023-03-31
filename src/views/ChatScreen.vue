@@ -11,8 +11,12 @@
       <ChatList @on-room-select="(room) => (selectedRoom = room)" />
     </n-layout-sider>
     <n-layout-content content-style="padding: 24px;display: flex;flex-direction: column">
-      <ChatRoom v-if="selectedRoom" :room="selectedRoom" />
-      <NResult v-else status="404" title="No chat room selected" class="my-auto" />
+      <Transition appear name="fade" mode="out-in">
+        <section v-if="selectedRoom" :key="selectedRoom.id" class="flex flex-col h-full">
+          <ChatRoom :room="selectedRoom" />
+        </section>
+        <NResult v-else status="404" title="No chat room selected" class="my-auto" />
+      </Transition>
     </n-layout-content>
   </n-layout>
 </template>

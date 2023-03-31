@@ -75,7 +75,7 @@
     const isFormValidated = await formValidator.value.$validate();
     if (!isFormValidated) return;
 
-    ChatService.sendEvent<Partial<IChatRoom>>(ChatEvent.CREATE_ROOM, formValues.value);
+    ChatService.sendEvent<IChatRoom>(ChatEvent.CREATE_ROOM, formValues.value);
 
     emit('on-room-create');
   };
@@ -105,7 +105,7 @@
     userSelectOptions.value = foundUsers.value?.map((user) => {
       return { label: user.username, value: user };
     });
-  }, 500);
+  }, 300);
 </script>
 
 <!-- TODO: Add proper error handling for Socket.IO events, abstract away in a composable logic for room-creation -->

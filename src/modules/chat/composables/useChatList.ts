@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 export default function useChatList() {
   const paginatedRooms = ref<IPaginatedRes<IChatRoom[]>>();
-  const paginationOptions = ref<TPaginationOptions>({ limit: 10, page: 1 });
+  const paginationOptions = ref<TPaginationOptions>({ limit: 15, page: 1 });
 
   ChatService.subscribeToEvent<IPaginatedRes<IChatRoom[]>>(ChatEvent.PAGINATE_ROOM, (payload) => {
     paginatedRooms.value = payload;

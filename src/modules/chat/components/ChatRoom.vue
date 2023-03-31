@@ -1,13 +1,47 @@
 <template>
-  <h2>{{ props.room?.name }}</h2>
-  {{ props.room }}
+  <div class="flex justify-between items-center">
+    <h2>{{ props.room?.name }}</h2>
+    <div>
+      <h4>Updated at {{ getFormattedTimeStamp(props.room?.updatedAt!) }}</h4>
+      <h4>{{ props.room?.description }}</h4>
+    </div>
+  </div>
+  <div class="flex">
+    <h4>Users:</h4>
+    <span class="mx-1" v-for="user in room?.users" :key="user.id">{{ user.username }}</span>
+  </div>
+
+  <NCard :bordered="false" embedded class="flex-1 overflow-y-auto scrollbar">
+    <section class="flex-1">
+      <p
+        v-for="message in paginatedMessages?.items"
+        :key="message.id"
+        class="m-3 p-3 rounded-lg w-fit bg-green-200"
+      >
+        <span class="font-semibold">{{ message.user?.username }}</span>
+        <br />
+        {{ message.text }}
+      </p>
+    </section>
+  </NCard>
+
+  <NForm @submit.prevent="sendMessage">
+    <NInputGroup>
+      <NInput v-model:value.trim="messageInput" placeholder="Type smth here" />
+      <NButton type="primary" attr-type="submit" :disabled="!messageInput">Send</NButton>
+    </NInputGroup>
+  </NForm>
 </template>
 
 <script setup lang="ts">
   import type { PropType } from 'vue';
   import type { IChatRoom } from '@/modules/chat/models/chat.models';
+  import useChatRoom from '@/modules/chat/composables/useChatRoom';
+  import getFormattedTimeStamp from '@/modules/common/utils/getFormattedTimeStamp';
 
   const props = defineProps({
     room: { type: Object as PropType<IChatRoom> },
   });
+
+  const { paginatedMessages, messageInput, sendMessage } = useChatRoom(props.room);
 </script>

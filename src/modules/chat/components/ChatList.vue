@@ -29,7 +29,7 @@
       v-model:page-size="paginationOptions.limit"
       :page-count="paginatedRooms?.meta.totalPages"
       :show-size-picker="showSizePicker"
-      :page-sizes="[5, 10, 20, 30]"
+      :page-sizes="[5, 10, 15, 20]"
       :on-update-page="handlePaginationUpdate"
       :on-update-page-size="handlePaginationUpdate"
     />
