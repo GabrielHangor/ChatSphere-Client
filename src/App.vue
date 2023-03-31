@@ -1,5 +1,5 @@
 <template>
-  <NConfigProvider abstract inline-theme-disabled :theme-overrides="themeOverrides">
+  <NConfigProvider abstract inline-theme-disabled>
     <NNotificationProvider>
       <main>
         <RouterView v-slot="{ Component, route }">
@@ -16,7 +16,6 @@
 <script setup lang="ts">
   import { useOsTheme, darkTheme, NThemeEditor } from 'naive-ui';
   import { computed } from 'vue';
-  import { themeOverrides } from '@/styles/themeOverrides';
 
   // const osThemeRef = useOsTheme();
 

@@ -12,15 +12,18 @@
   </div>
 
   <NCard :bordered="false" embedded class="flex-1 overflow-y-auto scrollbar">
-    <section class="flex-1">
+    <section>
       <p
         v-for="message in paginatedMessages?.items"
         :key="message.id"
-        class="m-3 p-3 rounded-lg w-fit bg-green-200"
+        class="m-3 p-3 rounded-lg w-fit max-w-[80%]"
+        :class="loggedInUser?.id === message.user?.id ? 'bg-green-200 ml-auto' : 'bg-slate-200'"
       >
         <span class="font-semibold">{{ message.user?.username }}</span>
-        <br />
-        {{ message.text }}
+        <span class="block">{{ message.text }}</span>
+        <span class="text-black text-[12px] text-right block italic">
+          {{ getFormattedTimeStamp(message.createdAt) }}
+        </span>
       </p>
     </section>
   </NCard>
@@ -38,10 +41,12 @@
   import type { IChatRoom } from '@/modules/chat/models/chat.models';
   import useChatRoom from '@/modules/chat/composables/useChatRoom';
   import getFormattedTimeStamp from '@/modules/common/utils/getFormattedTimeStamp';
+  import { useAuthStore } from '@/stores/auth';
 
   const props = defineProps({
     room: { type: Object as PropType<IChatRoom> },
   });
 
   const { paginatedMessages, messageInput, sendMessage } = useChatRoom(props.room);
+  const { user: loggedInUser } = useAuthStore();
 </script>

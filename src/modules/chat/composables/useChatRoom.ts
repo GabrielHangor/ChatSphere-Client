@@ -19,6 +19,10 @@ export default function useChatRoom(room: IChatRoom | undefined) {
 
   onBeforeUnmount(() => {
     ChatService.sendEvent(ChatEvent.LEAVE_ROOM, room);
+    ChatService.unsubscribeFromEvent<IPaginatedRes<IMessage[]>>(
+      ChatEvent.MESSAGES,
+      (messages) => (paginatedMessages.value = messages)
+    );
   });
 
   const sendMessage = () => {
