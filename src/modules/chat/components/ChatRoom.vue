@@ -11,7 +11,7 @@
     <span class="mx-1" v-for="user in room?.users" :key="user.id">{{ user.username }}</span>
   </div>
 
-  <NCard :bordered="false" embedded class="flex-1 overflow-y-auto scrollbar">
+  <NCard ref="chatWindow" :bordered="false" embedded class="flex-1 overflow-y-auto scrollbar">
     <section>
       <p
         v-for="message in paginatedMessages?.items"
@@ -37,16 +37,19 @@
 </template>
 
 <script setup lang="ts">
-  import type { PropType } from 'vue';
+  import { ref, type PropType } from 'vue';
   import type { IChatRoom } from '@/modules/chat/models/chat.models';
   import useChatRoom from '@/modules/chat/composables/useChatRoom';
   import getFormattedTimeStamp from '@/modules/common/utils/getFormattedTimeStamp';
   import { useAuthStore } from '@/stores/auth';
+  import type { NCard } from 'naive-ui';
 
   const props = defineProps({
     room: { type: Object as PropType<IChatRoom> },
   });
 
-  const { paginatedMessages, messageInput, sendMessage } = useChatRoom(props.room);
+  const chatWindow = ref<typeof NCard>();
+
+  const { paginatedMessages, messageInput, sendMessage } = useChatRoom(props.room, chatWindow);
   const { user: loggedInUser } = useAuthStore();
 </script>

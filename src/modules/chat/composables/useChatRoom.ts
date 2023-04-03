@@ -1,9 +1,9 @@
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import { ChatEvent, type IChatRoom, type IMessage } from '@/modules/chat/models/chat.models';
 import ChatService from '@/modules/chat/services/ChatService';
 import type { IPaginatedRes } from '@/modules/common/models/common.models';
 
-export default function useChatRoom(room: IChatRoom | undefined) {
+export default function useChatRoom(room: IChatRoom | undefined, chatWindowRef) {
   if (!room) throw Error('Room is not found');
 
   const paginatedMessages = ref<IPaginatedRes<IMessage[]>>();
@@ -11,18 +11,16 @@ export default function useChatRoom(room: IChatRoom | undefined) {
 
   onMounted(() => {
     ChatService.sendEvent(ChatEvent.JOIN_ROOM, room);
-    ChatService.subscribeToEvent<IPaginatedRes<IMessage[]>>(
-      ChatEvent.MESSAGES,
-      (messages) => (paginatedMessages.value = messages)
-    );
+
+    ChatService.subscribeToEvent(ChatEvent.MESSAGES, addPaginatedMessages);
+    ChatService.subscribeToEvent(ChatEvent.ADD_MESSAGE, addMessage);
   });
 
   onBeforeUnmount(() => {
     ChatService.sendEvent(ChatEvent.LEAVE_ROOM, room);
-    ChatService.unsubscribeFromEvent<IPaginatedRes<IMessage[]>>(
-      ChatEvent.MESSAGES,
-      (messages) => (paginatedMessages.value = messages)
-    );
+
+    ChatService.unsubscribeFromEvent(ChatEvent.MESSAGES, addPaginatedMessages);
+    ChatService.unsubscribeFromEvent(ChatEvent.ADD_MESSAGE, addMessage);
   });
 
   const sendMessage = () => {
@@ -31,6 +29,20 @@ export default function useChatRoom(room: IChatRoom | undefined) {
     ChatService.sendEvent<IMessage>(ChatEvent.ADD_MESSAGE, { text: messageInput.value, room });
 
     messageInput.value = null;
+  };
+
+  const addPaginatedMessages = (messages: IPaginatedRes<IMessage[]>) => {
+    paginatedMessages.value = messages;
+  };
+
+  const addMessage = async (message: IMessage) => {
+    if (message.room.id === room.id) {
+      paginatedMessages.value?.items.push(message);
+
+      const chatWindowDomEl: HTMLElement = chatWindowRef.value.$.vnode.el;
+      await nextTick();
+      chatWindowDomEl.scrollTop = chatWindowDomEl.scrollHeight - chatWindowDomEl.clientHeight;
+    }
   };
 
   return { paginatedMessages, messageInput, sendMessage };
