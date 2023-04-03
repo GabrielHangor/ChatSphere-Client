@@ -1,9 +1,10 @@
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import {  onBeforeUnmount, onMounted, ref } from 'vue';
 import { ChatEvent, type IChatRoom, type IMessage } from '@/modules/chat/models/chat.models';
 import ChatService from '@/modules/chat/services/ChatService';
 import type { IPaginatedRes } from '@/modules/common/models/common.models';
 
-export default function useChatRoom(room: IChatRoom | undefined, chatWindowRef) {
+
+export default function useChatRoom(room: IChatRoom | undefined) {
   if (!room) throw Error('Room is not found');
 
   const paginatedMessages = ref<IPaginatedRes<IMessage[]>>();
@@ -38,10 +39,6 @@ export default function useChatRoom(room: IChatRoom | undefined, chatWindowRef) 
   const addMessage = async (message: IMessage) => {
     if (message.room.id === room.id) {
       paginatedMessages.value?.items.push(message);
-
-      const chatWindowDomEl: HTMLElement = chatWindowRef.value.$.vnode.el;
-      await nextTick();
-      chatWindowDomEl.scrollTop = chatWindowDomEl.scrollHeight - chatWindowDomEl.clientHeight;
     }
   };
 

@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, type PropType } from 'vue';
+  import { nextTick, ref, watch, type PropType } from 'vue';
   import type { IChatRoom } from '@/modules/chat/models/chat.models';
   import useChatRoom from '@/modules/chat/composables/useChatRoom';
   import getFormattedTimeStamp from '@/modules/common/utils/getFormattedTimeStamp';
@@ -50,6 +50,17 @@
 
   const chatWindow = ref<typeof NCard>();
 
-  const { paginatedMessages, messageInput, sendMessage } = useChatRoom(props.room, chatWindow);
+  const { paginatedMessages, messageInput, sendMessage } = useChatRoom(props.room);
   const { user: loggedInUser } = useAuthStore();
+
+  watch(
+    () => paginatedMessages.value?.items.length,
+    async () => {
+      if (chatWindow.value) {
+        const chatWindowDomEl: HTMLElement = chatWindow?.value.$.vnode.el;
+        await nextTick();
+        chatWindowDomEl.scrollTop = chatWindowDomEl.scrollHeight - chatWindowDomEl.clientHeight;
+      }
+    }
+  );
 </script>
