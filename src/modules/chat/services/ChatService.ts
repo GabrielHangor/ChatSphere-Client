@@ -25,9 +25,14 @@ export default class ChatService {
 
   public static connect(accessToken: string) {
     try {
-      ChatService.socket = io(import.meta.env.VITE_BASE_SOCKET_URL, {
-        extraHeaders: { Authorization: accessToken },
-      });
+      ChatService.socket = io(
+        import.meta.env.MODE === 'production'
+          ? import.meta.env.VITE_BASE_SOCKET_URL_PROD
+          : import.meta.env.VITE_BASE_SOCKET_URL_DEV,
+        {
+          extraHeaders: { Authorization: accessToken },
+        }
+      );
     } catch (error) {
       console.error('Error initializing socket:', error);
       return;

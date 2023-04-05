@@ -1,7 +1,12 @@
 import axios, { AxiosError } from 'axios';
 import AuthService from '@/modules/user/services/AuthService';
 
-const ApiClient = axios.create({ baseURL: '/api' });
+const baseURL =
+  import.meta.env.MODE === 'production'
+    ? 'https://chatsphere-server-production.up.railway.app/'
+    : '/api';
+
+const ApiClient = axios.create({ baseURL });
 
 ApiClient.interceptors.response.use(
   (response) => {
